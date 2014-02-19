@@ -1,6 +1,6 @@
 var through = require('through'),
   str2js = require('string-to-js'),
-  types = ['html', 'css', 'json'],
+  types = ['html', 'css'],
   processes = {};
 
 function isValidFile (file) {
