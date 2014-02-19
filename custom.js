@@ -1,6 +1,7 @@
 var through = require('through'),
   str2js = require('string-to-js'),
-  types = ['html', 'css', 'json'];
+  types = ['html', 'css', 'json'],
+  processes = {};
 
 function isValidFile (file) {
   return types.some(function (type) {
@@ -10,6 +11,16 @@ function isValidFile (file) {
 
 function isFileType (file, type) {
 	return file.substr(-(type.length)) === type;
+}
+
+function getFileProcess (file) {
+	for (var type in processes) {
+		if (isFileType(file, type)) {
+			return processes[type];
+		}
+	}
+
+	return str2js;
 }
 
 function partialify (file) {
@@ -24,21 +35,17 @@ function partialify (file) {
     function () {
       if (buffer.indexOf('module.exports') === 0) {
         this.queue(buffer); // prevent "double" transforms
-      } else if (isFileType(file, 'json')) {
-        var out = str2js(buffer);
-        this.queue(
-          out.substring(0, out.indexOf("'") - 1) +
-          "JSON.parse(" +
-	      out.substring(out.indexOf("'"),out.lastIndexOf("'")) +
-	      "');"
-        );
       } else {
-        this.queue(str2js(buffer));
+        this.queue(getFileProcess(file)(buffer));
       }
       this.queue(null);
     });
 
 };
+
+exports.process = function (type, func) {
+	processes[type] = func;
+}
 
 exports.onlyAllow = function (extensions) {
   if (extensions) types = extensions;
