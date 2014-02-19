@@ -29,7 +29,7 @@ function partialify (file) {
         this.queue(
           out.substr(0, out.indexOf("'") - 1) +
           "JSON.parse(" +
-	      out.substr(out.indexOf("'"),out.lasIndexOf("'")) +
+	      out.substr(out.indexOf("'"),out.lastIndexOf("'")) +
 	      ");"
         );
       } else {
