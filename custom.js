@@ -4,8 +4,12 @@ var through = require('through'),
 
 function isValidFile (file) {
   return types.some(function (type) {
-    return file.substr(-(type.length)) === type;
+    return isFileType(file, type);
   });
+}
+
+function isFileType (file, type) {
+	return file.substr(-(type.length)) === type;
 }
 
 function partialify (file) {
@@ -20,6 +24,15 @@ function partialify (file) {
     function () {
       if (buffer.indexOf('module.exports') === 0) {
         this.queue(buffer); // prevent "double" transforms
+      } else if (isFileType(file, 'json')) {
+        var out = str2js(buffer);
+        this.queue(
+          out.substr(0, out.indexOf("'")) +
+          "JSON.parse(" +
+	      out.substr(out.indexOf("'"),out.lasIndexOf("'")) +
+	      ")" +
+	      out.substr(out.lastIndexOf("'"))
+        );
       } else {
         this.queue(str2js(buffer));
       }
