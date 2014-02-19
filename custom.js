@@ -10,17 +10,17 @@ function isValidFile (file) {
 }
 
 function isFileType (file, type) {
-	return file.substr(-(type.length)) === type;
+  return file.substr(-(type.length)) === type;
 }
 
 function getFileProcess (file) {
-	for (var type in processes) {
-		if (isFileType(file, type)) {
-			return processes[type];
-		}
-	}
+  for (var type in processes) {
+    if (isFileType(file, type)) {
+      return processes[type];
+    }
+  }
 
-	return str2js;
+  return str2js;
 }
 
 function partialify (file) {
@@ -44,7 +44,7 @@ function partialify (file) {
 };
 
 exports.process = function (type, func) {
-	processes[type] = func;
+  processes[type] = func;
 }
 
 exports.onlyAllow = function (extensions) {
