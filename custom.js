@@ -27,9 +27,9 @@ function partialify (file) {
       } else if (isFileType(file, 'json')) {
         var out = str2js(buffer);
         this.queue(
-          out.substr(0, out.indexOf("'") - 1) +
+          out.substring(0, out.indexOf("'") - 1) +
           "JSON.parse(" +
-	      out.substr(out.indexOf("'"),out.lastIndexOf("'")) +
+	      out.substring(out.indexOf("'"),out.lastIndexOf("'")) +
 	      ");"
         );
       } else {
