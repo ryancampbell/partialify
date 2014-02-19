@@ -30,7 +30,7 @@ function partialify (file) {
           out.substring(0, out.indexOf("'") - 1) +
           "JSON.parse(" +
 	      out.substring(out.indexOf("'"),out.lastIndexOf("'")) +
-	      ");"
+	      "');"
         );
       } else {
         this.queue(str2js(buffer));
