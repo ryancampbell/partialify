@@ -23,6 +23,12 @@ function getFileProcess (file) {
   return str2js;
 }
 
+function stripBOM(str){
+  return 0xFEFF == str.charCodeAt(0)
+    ? str.substring(1)
+    : str;
+}
+
 function partialify (file) {
 
   if (!isValidFile(file)) return through();
@@ -30,7 +36,7 @@ function partialify (file) {
   var buffer = "";
 
   return through(function (chunk) {
-      buffer += chunk.toString();
+      buffer += stripBOM(chunk.toString());
     },
     function () {
       if (buffer.indexOf('module.exports') === 0) {
